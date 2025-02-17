@@ -10,13 +10,13 @@ class Test_02
     //static int time = 500;
     //static int delay = 1;
     //static int number = 1;
-    static Program_test test = null;  //구조체 연습
-    static Class2 test1 = null;
-    static battle battle = null;
+    static MainMenu test = null;  //구조체 연습 
+    static Battle battle = null;
     static void Main()
     {
-        battle = new battle();
-        test = new Program_test();  //구조체 연습
+       
+        battle = new Battle();
+        test = new MainMenu();  //구조체 연습
         //test = new Class2();
         //Item.Main();
         //battle.Start();

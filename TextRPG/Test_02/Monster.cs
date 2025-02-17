@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,14 +9,14 @@ struct MonsterList
 {
     public float Hp;
     public string Name;
-    public float Amr;
     public float Atk;
+    public float Amr;
     public int Exp;
     public int Spd;
 }
 class Monster
 {
-    MonsterList[] Monst = new MonsterList[3];
+    public MonsterList[] Monst = new MonsterList[3];
 
     public Monster()
     {
@@ -40,5 +41,19 @@ class Monster
         Monst[2].Spd = 3;
         Monst[2].Exp = 1;
     }
+
+    float MonHp;
+    float MonName;
+    float MonAtk;
+    float MonAmr;
+    float MonSpd;
+    float MonExp;
+    public void FieldMonster()
+    {
+        int MonstAmount = 0;
+        Monster[] FieldMonst = new Monster[1];
+        FieldMonst[0] = Monst[0];
+    }
+
 }
 
