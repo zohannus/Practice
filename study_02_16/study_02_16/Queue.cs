@@ -11,7 +11,7 @@ public class Queue<T>
     /// </summary>
     /// <param name="t">The element to be added to the queue.</param>
     /// 
-    public T[] Skill = new T[5];
+    public T[] Skill = new T[10];
     public int count = 0;
     public void Enqueue(T t)
     {

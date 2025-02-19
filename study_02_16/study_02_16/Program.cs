@@ -31,7 +31,7 @@ class ItemCall
             while (depth == 0)
             {
                 Console.WriteLine($"아이템 수량 : ({stack.count}/10)");
-                Console.WriteLine("원하는 메뉴를 선택해주세요. \n1. 아이템 입력 \n2. 아이템 확인 \n3. 스킬 설정");
+                Console.WriteLine("원하는 메뉴를 선택해주세요. \n1. 아이템 입력 \n2. 아이템 확인 \n3. 스킬 설정 \n 4. 파티원 설정");
                 Console.WriteLine($"가방 상태 : {stack.IsEmpty()}/{stack.Count()}/{stack.Items.Length}" +
                     $"\n스킬 슬롯 상태 :{queue.IsEmpty()}/{queue.Count()}/{queue.Skill.Length}");
                 Chat = Console.ReadLine();
@@ -144,13 +144,67 @@ class ItemCall
                 }
 
             }
-        }
+            else if (number == 4)
+            {
+                Console.Clear();
+                Console.WriteLine("파티원을 설정합니다.");
+                Console.WriteLine("1. 파티원 추가\n2. 나가기");
+                depth++;
+                Chat = Console.ReadLine();
+                int.TryParse(Chat, out number);
+                if (number == 1 && depth == 2)
+                {
+                    while (number == 1 && depth == 2)
+                    {
+                        Console.WriteLine($"파티원을 입력해주세요");
+                        Chat = Console.ReadLine();
+                        if (Chat != "취소" && Chat != "나가기" && Chat != "확인" && Chat != "비우기")
+                        {
+                            linked.AddLast(Chat);
+                        }
+                        else if (Chat == "취소")
+                        {
+                            if (queue.count > 0)
+                            {
+                                Console.WriteLine($"첫번째 스킬 {queue.Dequeue()} 가 삭제되었습니다.");
+                            }
+                            else
+                                Console.WriteLine("삭제할 스킬이 없습니다");
+                            Chat = "";
+                        }
+                        else if (Chat == "나가기")
+                        {
+                            depth = 0;
+                            number = 0;
+                            Start();
+                        }
+                        else if (Chat == "비우기")
+                            queue.Clear();
+                        else if (Chat == "확인")
+                        {
+                            Console.Clear();
+                            //Console.WriteLine($"현재 Peek 값 : {queue.Peek()} / count 값 : {queue.Count()} / IsEmpty 값 : {queue.IsEmpty()}");
+                            foreach (string member in linked)
+                            {
+                                Console.WriteLine($"{member}");
+                            }
+                        }
+                    }
+                }
+                else if (number == 2 && depth == 2)
+                {
+                    depth = 0;
+                    number = 0;
+                    Start();
+                }
+            }
 
 
-        // While
-        //void Main
-    } //class ItemCall
+            // While
+            //void Main
+        } //class ItemCall
 
+    }
 }
 
 

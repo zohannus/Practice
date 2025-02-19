@@ -3,23 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
-public class LinkedListNode<T>
+public class LinkedListNode
 {
     public string Member = "";
-    public LinkedListNode<string> Next;
+    public int count = 0;
+    public LinkedListNode Prev;
+    public LinkedListNode Next;
 
     public LinkedListNode(string member)
     {
         Member = member;
         Next = null;
+        Prev = null;
     }
 }
 
-public class LinkedList<T>
+public class LinkedList
 {
-    LinkedListNode<string> head;
+    LinkedListNode head;
 
     public LinkedList()
     {
@@ -30,30 +34,31 @@ public class LinkedList<T>
         return default;
     }
 
-    public LinkedListNode<T> GetFirst()
+    public LinkedListNode GetFirst()
     {
         return default;
     }
 
-    public LinkedListNode<T> GetLast()
+    public LinkedListNode GetLast()
     {
 
         return default;
     }
 
-    public LinkedListNode<T> AddFirst(T t)
+    public LinkedListNode AddFirst(string t)
     {
         return default;
     }
 
-    public LinkedListNode<T> AddLast(T t)
+    public LinkedListNode AddLast(string t)
     {
+
         return default;
     }
 
     public void RemoveFirst()
     {
-
+        
     }
 
     public void RemoveLast()
@@ -61,7 +66,7 @@ public class LinkedList<T>
 
     }
 
-    public bool Remove(T value)
+    public bool Remove(int value)
     {
         return default;
     }
@@ -72,12 +77,12 @@ public class LinkedList<T>
     }
 
 
-    public bool Contain(T value)
+    public bool Contain(string value)
     {
         return default;
     }
 
-    public LinkedListNode<T> Find(T value)
+    public LinkedListNode Find(string value)
     {
         return default;
     }
