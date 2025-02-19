@@ -5,115 +5,18 @@ using System.Runtime.Intrinsics.X86;
 /// Provides a generic stack data structure for storing and managing a collection of elements.
 /// </summary>
 /// <typeparam name="T">The type of elements in the stack.</typeparam>
-public class Stack<T>
-{
-    public T[] Items = new T[10];
-    public int count = 0;
-    /// <summary>
-    /// Adds an element to the top of the stack.
-    /// </summary>
-    /// <param name="t">The element to be added to the stack.</param>
-    /// 
-
-    public void Push(T t)
-    {
-        if (count >= 10)
-        {
-            Console.WriteLine("가방이 가득찼습니다");
-            return;
-        }
-        Items[count] = t; // ✅ 값 저장 확인
-        Console.WriteLine($"{t} 아이템이 추가되었습니다. (현재 개수: {count + 1}/10)");
-        count++; // ✅ 증가 위치 확인
-    }
-
-
-
-    /// <summary>
-    /// Removes and returns the element at the top of the stack.
-    /// </summary>
-    /// <returns>The element removed from the top of the stack.</returns>
-    public T Pop()
-    {
-        if (count == 0)
-        {
-            Console.WriteLine("스택이 비어 있어 삭제할 수 없습니다.");
-            return default(T);
-        }
-
-        T item = Items[count-1]; // ✅ count 감소 후 요소 반환
-        Items[count-1] = default(T); // ✅ 메모리 정리
-        count--;
-        return item;
-    }
-
-    /// <summary>
-    /// Returns the element at the top of the stack without removing it.
-    /// </summary>
-    /// <returns>The element at the top of the stack.</returns>
-    public T Peek()
-    {
-        Console.WriteLine(Items[count]);
-        return default;
-    }
-
-    public void Check()
-    {
-
-        Console.WriteLine("현재 가방에 있는 아이템 목록:");
-
-        if (count == 0)
-        {
-            Console.WriteLine("가방이 비어있습니다.");
-            Thread.Sleep(1000);
-            return;
-        }
-        for (int i = 0; i < count; i++)
-        {
-            Console.WriteLine($"-{i+1}슬롯 {Items[i]}");
-        }
-    }
-
-    /// <summary>
-    /// Gets the number of elements contained in the stack.
-    /// </summary>
-    /// <returns>The total number of elements in the stack.</returns>
-    public int Count()
-    {
-        Console.WriteLine(count);
-        return count;
-    }
-
-    /// <summary>
-    /// Removes all elements from the stack.
-    /// </summary>
-    public void Clear()
-    {
-        for(int i = 0; i < count; i++)
-        {
-            Items[i] = default(T);
-        }
-        count = 0;
-        Queue<int> a = new Queue<int>();
-    }
-
-    /// <summary>
-    /// Determines whether the stack contains no elements.
-    /// </summary>
-    /// <returns>True if the stack is empty; otherwise, false.</returns>
-    public bool IsEmpty()
-    {
-        return false;
-    }
-}
 
 class ItemCall
 {
     int depth = 0;
     Stack<string> stack = null;
+    Queue<string> queue = null;
+    LinkedList<string> linked = null;
     public void Main()
     {
         stack = new Stack<string>();
+        queue = new Queue<string>();
+        linked = new LinkedList<string>();
         Start();
     }
 
@@ -127,7 +30,10 @@ class ItemCall
         {
             while (depth == 0)
             {
-                Console.WriteLine("원하는 메뉴를 선택해주세요. \n1. 아이템 입력 \n2. 아이템 확인 \n3. 가방비우기 \n4. 가방이 비어있는지 확인");
+                Console.WriteLine($"아이템 수량 : ({stack.count}/10)");
+                Console.WriteLine("원하는 메뉴를 선택해주세요. \n1. 아이템 입력 \n2. 아이템 확인 \n3. 스킬 설정");
+                Console.WriteLine($"가방 상태 : {stack.IsEmpty()}/{stack.Count()}/{stack.Items.Length}" +
+                    $"\n스킬 슬롯 상태 :{queue.IsEmpty()}/{queue.Count()}/{queue.Skill.Length}");
                 Chat = Console.ReadLine();
                 int.TryParse(Chat, out number);
                 depth++;
@@ -140,13 +46,10 @@ class ItemCall
             {
                 while (number == 1 && depth == 1)
                 {
-                    Console.WriteLine($"아이템 수량 : ({stack.count}/10)");
-                    Console.Write("최근 아이템 : ");
-                    stack.Peek();
-                    Console.WriteLine();
+                    Console.WriteLine($"최근 아이템 :{stack.Peek()}");
                     Console.Write("아이템명 :");
                     Chat = Console.ReadLine();
-                    if (Chat != "취소" && Chat != "나가기")
+                    if (Chat != "취소" && Chat != "나가기" && Chat != "비우기")
                     {
                         stack.Push(Chat);
                     }
@@ -167,158 +70,88 @@ class ItemCall
                         number = 0;
                         Start();
                     }
+                    else if (Chat == "비우기")
+                    {
+                        stack.Clear();
+                        Console.WriteLine("가방이 비워졌습니다.");
+                    }
                 }
             }
             else if (number == 2)
             {
                 stack.Check();
+                Thread.Sleep(3000);
+                number = 0;
+                depth = 0;
+                Start();
             }
 
             else if (number == 3)
             {
-                stack.Clear();
-                Console.WriteLine("가방이 비워졌습니다.");
-                Thread.Sleep(1000);
-                Start();
-                number = 0;
-            }
+                Console.Clear();
+                Console.WriteLine("1. 스킬설정하기 \n2. 나가기");
+                depth++;
+                Chat = Console.ReadLine();
+                int.TryParse(Chat, out number);
+                if (number == 1 && depth == 2)
+                {
+                    while (number == 1 && depth == 2)
+                    {
+                        Console.WriteLine("스킬이름을 입력해주세요");
+                        Chat = Console.ReadLine();
+                        if (Chat != "취소" && Chat != "나가기" && Chat != "확인" && Chat != "비우기")
+                        {
+                            queue.Enqueue(Chat);
+                        }
+                        else if (Chat == "취소")
+                        {
+                            if (queue.count > 0)
+                            {
+                                Console.WriteLine($"첫번째 스킬 {queue.Dequeue()} 가 삭제되었습니다.");
+                            }
+                            else
+                                Console.WriteLine("삭제할 스킬이 없습니다");
+                            Chat = "";
+                        }
+                        else if (Chat == "나가기")
+                        {
+                            depth = 0;
+                            number = 0;
+                            Start();
+                        }
+                        else if (Chat == "비우기")
+                            queue.Clear();
+                        else if (Chat == "확인")
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"현재 Peek 값 : {queue.Peek()} / count 값 : {queue.Count()} / IsEmpty 값 : {queue.IsEmpty()}");
+                            for (int i = 0; i < 5; i++)
+                            {
+                                Console.Write($"{i + 1} 슬롯 {queue.Skill[i]}");
+                                if (i == 0)
+                                    Console.Write(" <--이 스킬부터 사용됨");
+                                Console.WriteLine();
 
-            else if (number == 4)
-            {
-                Console.WriteLine("미구현");
+                            }
+                        }
+                    }
+                }
+                else if (number == 2 && depth == 2)
+                {
+                    depth = 0;
+                    number = 0;
+                    Start();
+                }
+
             }
         }
-    }
-                    
-         // While
-    //void Main
-} //class ItemCall
-            
 
 
-/// <summary>
-/// Provides a generic queue data structure for storing and managing a collection of elements in a first-in, first-out (FIFO) order.
-/// </summary>
-/// <typeparam nam
-/// e="T">The type of elements in the queue.</typeparam>
-//public class Queue<T>
-//{
-//    /// <summary>
-//    /// Adds an element to the end of the queue.
-//    /// </summary>
-//    /// <param name="t">The element to be added to the queue.</param>
-//    public void Enqueue(T t)
-//    {
+        // While
+        //void Main
+    } //class ItemCall
 
-//    }
-
-//    /// <summary>
-//    /// Removes and returns the element at the front of the queue.
-//    /// </summary>
-//    /// <returns>The element at the front of the queue.</returns>
-//    public T Dequeue()
-//    {
-//        return default;
-//    }
-
-//    /// <summary>
-//    /// Returns the element at the front of the queue without removing it.
-//    /// </summary>
-//    /// <returns>The element at the front of the queue.</returns>
-//    public T Peek()
-//    {
-//        return default;
-//    }
+}
 
 
-//    /// <summary>
-//    /// Gets the total number of elements currently in the queue.
-//    /// </summary>
-//    /// <returns>The number of elements in the queue.</returns>
-//    public int Count()
-//    {
-//        return 0;
-//    }
 
-//    /// <summary>
-//    /// Removes all elements from the queue, leaving it empty.
-//    /// </summary>
-//    public void Clear()
-//    {
-//    }
-
-//    /// <summary>
-//    /// Determines whether the queue is empty.
-//    /// </summary>
-//    /// <returns>True if the queue contains no elements; otherwise, false.</returns>
-//    public bool IsEmpty()
-//    {
-//        LinkedList<T> a = new LinkedList<T>();
-//        a.
-//        return false;
-//    }
-//}
-
-//public class LinkedListNode<T>
-//{
-
-//}
-
-//public class LinkedList<T>
-//{
-//    public int Count()
-//    {
-
-//    }
-
-//    public LinkedListNode<T> GetFirst()
-//    {
-
-//    }
-
-//    public LinkedListNode<T> GetLast()
-//    {
-
-//    }
-
-//    public LinkedListNode<T> AddFirst(T t)
-//    {
-
-//    }
-
-//    public LinkedListNode<T> AddLast(T t)
-//    {
-
-//    }
-
-//    public void RemoveFirst()
-//    {
-
-//    }
-
-//    public void RemoveLast()
-//    {
-
-//    }
-
-//    public bool Remove(T value)
-//    {
-
-//    }
-
-//    public void Clear()
-//    {
-
-//    }
-
-
-//    public bool Contain(T value)
-//    {
-
-//    }
-
-//    public LinkedListNode<T> Find(T value)
-//    {
-
-//    }
-//}
