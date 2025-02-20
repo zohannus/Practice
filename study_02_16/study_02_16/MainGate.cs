@@ -5,7 +5,7 @@
     static void Main()
     {
         itemCall = new ItemCall();
-        //test.Main();
-        itemCall.Main();
+        test.Main();
+        //itemCall.Main();
     }
 }

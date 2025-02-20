@@ -1,43 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 class Test_01
 {
-    
+    Dictionary<int, string> items = null;
+
+
     public void Main()
     {
-        LinkedList<string> numbers = new LinkedList<string>();
-        int count = 0;
-        string Chat = "";
-        while (true)
-        {
-            Chat = Console.ReadLine();
-            if (Chat != "확인" && Chat != "취소" && count == 0)
-            {
+        string text = "apple banana apple grape banana apple";
+        var wordCount = new Dictionary<string, int>();
 
-                numbers.AddLast(Chat);
-            }
-            else if (Chat == "확인" && count == 0)
-            {
-                foreach (var member in numbers)
-                {
-                    Console.WriteLine(member);
-                }
-                Chat = "";
-            }
-            else if(Chat == "취소")
-            {
-                count++;
-                if (count == 1)
-                {
-                    Chat = Console.ReadLine();
-                    numbers.Remove(Chat);
-                    count = 0;
-                }
-            }
+        foreach (var word in text.Split(' '))
+        {
+            if (wordCount.ContainsKey(word))
+                wordCount[word]++;
+            else
+                wordCount[word] = 1;
+        }
+
+        foreach (var kv in wordCount)
+        {
+            Console.WriteLine($"{kv.Key}: {kv.Value}");
+        }
+
+        foreach (var key in wordCount.Keys)
+        {
+            Console.WriteLine($"Key: {key}");
         }
     }
 }
