@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using static Monster;
 
 class Battle
 {
@@ -7,87 +8,65 @@ class Battle
     const int PlayerTurn = 0;
     const int ComputerTurn = 1;
 
-    // 플레이어 변수
-    
-
-    // 몬스터 변수
-   
-    float Randint;
-
-    MainMenu Menu = null;
     Skill_Info SkInfo = new Skill_Info();
-    CharacterStatus Status = null;
+    MonsterManager monster = new MonsterManager();
 
     Random Rand = new Random();
-    Monster Mob = new Monster();
+    
 
     public void Start()
     {
-        Status = new CharacterStatus();
-        Menu = new MainMenu();
+       
+        //int ranchoice = 0; 
+        //ranchoice = Rand.Next(monster.mobList.Count);
+        //BattleStart(ranchoice);
     }
 
-    public void BattleStart(int MonsterChoice)
+    public void BattleStart(int choice)
     {
-        //while (Status.Hp > 0 && Mob.Monst[MonsterChoice].Hp > 0) 
-        //{
-        if (Turn == PlayerTurn)
+       
+            Monster mobData = monster.mobList[choice];
+        while (CharacterStatus.Instance.Hp > 0 && mobData.Hp > 0)
         {
-            int i = 0;
-            int MobNumber = 0;
-            Console.Clear();
-            Console.WriteLine($"상대 : {Mob.Monst[MonsterChoice].Name} / {Mob.Monst[MonsterChoice].Hp} ");
-            MobNumber = MonsterChoice;
-            Console.WriteLine("무엇을 할까?");
-            for (i = 0; i < Enum.GetValues(typeof(Skill)).Length; i++)
+            if (Turn == PlayerTurn)
             {
-                SkInfo.SkillType((Skill)i);
-                Console.WriteLine($"{i}.{SkInfo.SkillName}:{SkInfo.SkillInfo}");
+                int i = 0;
+                Console.Clear();
+                Console.WriteLine($"상대 : {mobData.Name} / {mobData.Hp} ");
+                Console.WriteLine("무엇을 할까?");
+                for (i = 0; i < Enum.GetValues(typeof(Skill)).Length; i++)
+                {
+                    SkInfo.SkillType((Skill)i);
+                    Console.WriteLine($"{i}.{SkInfo.SkillName}:{SkInfo.SkillInfo}");
+                }
+                Console.WriteLine($"{i}.도망가기 : ");
+
+                string chat = Console.ReadLine();
+                int.TryParse(chat, out int SkillChoice);
+
+                SkInfo.PlayerAtk((Skill)SkillChoice, mobData);
+                Thread.Sleep(1000);
+                Turn = 1;
             }
-            Console.WriteLine($"{i}.도망가기 : ");
+            else if (Turn == ComputerTurn)
+            {
+                Console.WriteLine($"{mobData.Name} 턴"); //몬스터 변수로 바꾸기
+                Thread.Sleep(500);
+                Console.WriteLine($"{mobData.Name}의 공격! {monster.MobNormalAttack(choice)}");
+                CharacterStatus.Instance.Hp -= monster.mobDamage;
+                Console.WriteLine($"{CharacterStatus.Instance.Hp} 남았다.");
+                Thread.Sleep(1000);
+                Turn = 0;
+            }
 
-            string chat = Console.ReadLine();
-            int.TryParse(chat, out int SkillChoice);
-
-            PlayerAtt((Skill)SkillChoice, Mob.Monst[MobNumber].Hp, Mob.Monst[MobNumber].Amr);
-        }
-        else if (Turn == ComputerTurn)
-        {
-            Console.WriteLine("컴퓨터의 턴"); //몬스터 변수로 바꾸기
-        }
-        //}
-    }
-    void PlayerAtt(Skill SkType, float MonsterHp, float MonsterAmr)
-    {
-        float myDmg = ((Status.Att - MonsterAmr + Randint) * SkInfo.SkillDamage );
-        if (SkType == Skill.Skill_0)
-        {
-            Console.Clear();
-            SkInfo.SkillType(Skill.Skill_0);
-            myDmg = ((Status.Att - MonsterAmr + Randint) * SkInfo.SkillDamage);
-            Randint = Rand.Next(-3, 3);
-            MonsterHp -= myDmg;                   // 플레이어의 데미지 : 10 에서 +- 5
-            Console.WriteLine($"{SkInfo.SkillName} 사용..{myDmg}의 타격..!! \n 적의 체력 :{MonsterHp}");
-        }
-        else if (SkType == Skill.Skill_1)
-        {
-            Console.Clear();
-            SkInfo.SkillType(Skill.Skill_1);
-            myDmg = ((Status.Att - MonsterAmr + Randint) * SkInfo.SkillDamage);
-            Randint = Rand.Next(-3, 3);
-            MonsterHp -= myDmg;                   // 플레이어의 데미지 : 10 에서 +- 5
-            Console.WriteLine($"{SkInfo.SkillName} 사용..{myDmg}의 타격..!! \n {MonsterHp} 남았다.");
-        }
-        else if (SkType == Skill.Skill_2)
-        {
-            Console.Clear();
-            SkInfo.SkillType(Skill.Skill_2);
-            myDmg = ((Status.Att + Randint) * SkInfo.SkillDamage);
-            Randint = Rand.Next(-3, 3);
-            Status.Hp += myDmg;                   // 회복
-            Console.WriteLine($"{SkInfo.SkillName} 사용..{myDmg}만큼 회복..!! \n {Status.Hp} 이 되었다");
+            if (CharacterStatus.Instance.Hp <= 0 || mobData.Hp <= 0)
+            {
+                Console.WriteLine("배틀종료");
+                Turn = 0;
+            }
         }
     }
+    
 
 
 }

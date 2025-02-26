@@ -4,56 +4,70 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
-struct MonsterList
+
+public class Monster
 {
-    public float Hp;
-    public string Name;
-    public float Atk;
-    public float Amr;
-    public int Exp;
-    public int Spd;
-}
-class Monster
-{
-    public MonsterList[] Monst = new MonsterList[3];
-
-    public Monster()
+    public string Name { get; set; }
+    public float Hp { get;  set; }
+    public float Atk { get; set; }
+    public float Amr { get; set; }
+    public float Exp { get; set; }
+    public float Spd { get; set; }
+    public Monster(string name, float hp, float atk, float amr, float exp, float spd)
     {
-        Monst[0].Hp = 30;
-        Monst[0].Name = "슬라임";
-        Monst[0].Atk = 10;
-        Monst[0].Amr = 0;
-        Monst[0].Spd = 1;
-        Monst[0].Exp = 1;
-
-        Monst[1].Hp = 20;
-        Monst[1].Name = "늑대";
-        Monst[1].Atk = 10;
-        Monst[1].Amr = 0;
-        Monst[1].Spd = 5;
-        Monst[1].Exp = 1;
-
-        Monst[2].Hp = 30;
-        Monst[2].Name = "새끼용";
-        Monst[2].Atk = 10;
-        Monst[2].Amr = 0;
-        Monst[2].Spd = 3;
-        Monst[2].Exp = 1;
-    }
-
-    float MonHp;
-    float MonName;
-    float MonAtk;
-    float MonAmr;
-    float MonSpd;
-    float MonExp;
-    public void FieldMonster()
-    {
-        int MonstAmount = 0;
-        Monster[] FieldMonst = new Monster[1];
-        FieldMonst[0] = Monst[0];
+        Name = name;
+        Hp = hp;
+        Atk = atk;
+        Amr = amr;
+        Exp = exp;
+        Spd = spd;
     }
 
 }
+
+public class MonsterManager
+{
+
+    public List<Monster> mobList { get; set; }
+    public float mobDamage = 0;
+    public MonsterManager()
+    {
+        mobList = new List<Monster>()
+            {//이름 / 체력 / 공격력 / 방어력 / 경험치 / 속도
+                new Monster("슬라임", 30, 10, 0, 1, 1),
+                new Monster("늑대", 20, 15, 0, 2, 1),
+                new Monster("새끼용", 30, 10, 0, 5, 1),
+                new Monster("하이에나", 40, 15, 1, 4, 1)
+            };
+    }
+
+    public (string name, float resultDMG) MobNormalAttack(int mobChoice)
+    {
+        Random rand = new Random();
+        int atkType = 0;
+        string atkName = "";
+        atkType = rand.Next(4);
+        Monster monster = mobList[mobChoice];
+        
+        float dmgPlus = 0.0f;
+        switch (atkType)
+        {
+            case 0:
+                dmgPlus = 0.2f; atkName = "스친 공격";  break;
+            case 1:
+                dmgPlus = 0.7f; atkName = "정확한 공격"; break;
+            case 2:
+                dmgPlus = 1.0f; atkName = "치명타"; break;
+            case 3:
+                dmgPlus = 0.0f; atkName = "빗나감"; break;
+
+               
+        }
+        mobDamage = (monster.Atk - CharacterStatus.Instance.Amr) * dmgPlus;
+        return (atkName, mobDamage);
+    }
+}
+
 

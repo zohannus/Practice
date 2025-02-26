@@ -12,6 +12,7 @@ using System.ComponentModel;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics.Metrics;
 using System.Numerics;
+using static Monster;
 
 
 
@@ -22,7 +23,7 @@ public class MainMenu
     ItemList list = new ItemList();
     BagCtrl Item = new BagCtrl();
     Battle Battle = null;
-    Monster Mob = new Monster();
+    MonsterManager Mob = new MonsterManager();
     int Day = 1;
     bool ShopCan = true;
 
@@ -126,16 +127,16 @@ public class MainMenu
                 //Console.Clear();
                 int MonsterChoice;
                 Random random = new Random();
-                MonsterChoice = random.Next(3);
+                MonsterChoice = random.Next(Mob.mobList.Count);
 
-                Console.WriteLine($"야생의 {Mob.Monst[MonsterChoice].Name} 를 만났다. 어떻게 할까?");
+                Console.WriteLine($"야생의 {Mob.mobList[MonsterChoice].Name} 를 만났다. 어떻게 할까?");
 
                 Console.WriteLine("1. 전투\n2. 도망가기");
                 Huntchat = Console.ReadLine();
                 int.TryParse(Huntchat, out Huntint);
                 if (Huntint == 1 && HuntState == 1)
                 {
-                    Locate = Location.HuntStart;
+                    //Locate = Location.HuntStart;
                     Battle.BattleStart(MonsterChoice);
                 }
                 else if (Huntint == 2 && HuntState == 1)

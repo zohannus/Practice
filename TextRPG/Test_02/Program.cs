@@ -12,16 +12,16 @@ class Test_02
     //static int number = 1;
     static MainMenu test = null;  //구조체 연습 
     static Battle battle = null;
+    static Monster mob = null;
     static void Main()
     {
-       
         battle = new Battle();
         test = new MainMenu();  //구조체 연습
         //test = new Class2();
         //Item.Main();
         //battle.Start();
         test.Start();
-
+        
         //Console.WriteLine("==================\n 타 이 밍    게 임 \n made by zohannus \n==================");
 
         //Console.WriteLine(" 난이도를 설정해주세요. 3,5,10,20 중 입력");
