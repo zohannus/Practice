@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
+using Test_02;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
-class Test_02
+class Program
 {
     //static int time = 500;
     //static int delay = 1;
@@ -13,8 +14,18 @@ class Test_02
     static MainMenu test = null;  //구조체 연습 
     static Battle battle = null;
     static Monster mob = null;
-    static void Main()
+    public static void Main()
     {
+        Managers.Instance.Initialize();
+
+        while (Managers.Run)
+        {
+            Managers.Instance.Update();
+        }
+
+        Managers.Instance.Release();
+
+
         battle = new Battle();
         test = new MainMenu();  //구조체 연습
         //test = new Class2();

@@ -65,7 +65,7 @@ public class MonsterManager
 
                
         }
-        mobDamage = (monster.Atk - CharacterStatus.Instance.Amr) * dmgPlus;
+        mobDamage = (monster.Atk - Status.Instance.Amr) * dmgPlus;
         return (atkName, mobDamage);
     }
 }
