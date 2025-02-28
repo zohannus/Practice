@@ -9,7 +9,7 @@ namespace Test_02
         Skill_2,
         Skill_3
     }
-    class Skill_Info : IManager
+    public class Skill_Info : IManager
     {
         public string SkillName;
         public string SkillInfo;
